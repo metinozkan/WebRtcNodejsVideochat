@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import socketIO, { Server as SocketIOServer } from "socket.io";
 import { createServer, Server as HTTPServer } from "http";
-
+import path from "path";
 export class Server {
   private httpServer: HTTPServer;
   private app: Application;
@@ -11,7 +11,6 @@ export class Server {
 
   constructor() {
     this.initialize();
-
     this.handleRoutes();
     this.handleSocketConnection();
   }
@@ -20,12 +19,25 @@ export class Server {
     this.app = express();
     this.httpServer = createServer(this.app);
     this.io = socketIO(this.httpServer);
+
+    this.configureApp();
+    this.handleSocketConnection();
   }
 
   private handleRoutes(): void {
     this.app.get("/", (req, res) => {
       res.send(`<h1>Hello World</h1>`);
     });
+    this.app.post("/", (req, res) => {
+      res.send(`<h1>post istegi </h1>`);
+    });
+    this.app.get("/home", (req, res) => {
+      res.send(`<h1>Home</h1>`);
+    });
+  }
+
+  private configureApp(): void {
+    this.app.use(express.static(path.join(__dirname, "../public")));
   }
 
   private handleSocketConnection(): void {
