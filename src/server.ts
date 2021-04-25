@@ -6,7 +6,7 @@ export class Server {
   private httpServer: HTTPServer;
   private app: Application;
   private io: SocketIOServer;
-
+  private activeSockets: string[] = [];
   private readonly DEFAULT_PORT = 5000;
 
   constructor() {
